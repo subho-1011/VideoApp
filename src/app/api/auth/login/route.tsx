@@ -11,36 +11,32 @@ import { cookies } from "next/headers";
 export async function POST(request: NextRequest) {
     try {
         connectDB();
-        console.log("User registering....");
 
         const res = await request.json();
         const { email, password } = res;
-        console.log(email, password);
         if ([email, password].some((field) => field?.trim === "")) {
-            return {
+            return NextResponse.json({
                 status: 400,
                 message: "Email and password are required",
-            };
+            });
         }
         console.log("Email and password are ok");
 
         const user = await User.findOne({ email: email });
         if (!user) {
-            return {
+            return NextResponse.json({
                 status: 400,
                 message: "User not found",
-            };
+            });
         }
-        console.log("Email and password are ok");
 
         const isPasswordMatch = await bcryptjs.compare(password, user.password);
         if (!isPasswordMatch) {
-            return {
+            return NextResponse.json({
                 status: 400,
                 message: "Invalid password",
-            };
+            });
         }
-        console.log("User registering....");
 
         const sessionToken = async () => {
             return jwt.sign(

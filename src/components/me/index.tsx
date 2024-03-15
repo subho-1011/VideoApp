@@ -1,17 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-
-import { Edit2Icon } from "lucide-react";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { AvatarCard, ProfileCoverImage } from "./avatar-card";
+import { AvatarCard } from "./avatar-card";
 import axios from "axios";
+import { ProfileCoverImage } from "./cover-image";
+import { useAppSelector } from "@/lib/hooks";
 
 export default function Profile() {
     return (
@@ -38,39 +35,12 @@ type UserData = {
     email: string;
     fullname: string;
     username: string;
-    avatar: Avatar | null;
+    avatar?: Avatar;
 };
 
 export function ProfileCard() {
     const [isEditable, setIsEditable] = React.useState<boolean>(false);
-    const [userData, setUserData] = useState<UserData>({
-        fullname: "",
-        username: "",
-        email: "",
-        avatar: null,
-    });
-
-    useEffect(() => {
-        async function getUserData() {
-            const response = await axios({
-                method: "GET",
-                url: "/api/auth/me",
-            });
-
-            if (response.data.status === 200) {
-                const data = response.data.data;
-                userData.email = data.email;
-                userData.fullname = data.fullname;
-                userData.username = data.username;
-                userData.avatar = data.avatar;
-                setUserData(userData);
-                console.log(userData);
-            } else {
-                console.log("Error: " + response.data);
-            }
-        }
-        getUserData();
-    }, [userData]);
+    const userData = useAppSelector((state) => state.User.user);
 
     const onEditable = () => {
         setIsEditable(!isEditable);
@@ -80,26 +50,26 @@ export function ProfileCard() {
         <Card>
             <CardContent className="lg:flex justify-between items-center gap-4 gap-x-10 mt-10 lg:mx-20 mx-10">
                 <div className="flex lg:w-[40vh] justify-center">
-                    <AvatarCard avatar={userData.avatar} />
+                    <AvatarCard />
                 </div>
                 <div className="flex flex-col justify-center lg:w-[60vh] gap-8">
                     <div className="flex items-center">
                         <Label htmlFor="fullName" className="w-[25vh] text-md">
                             Full Name
                         </Label>
-                        <Input value={userData.fullname} readOnly={!isEditable} />
+                        <Input value={userData?.fullname} readOnly={!isEditable} />
                     </div>
                     <div className="flex items-center">
                         <Label htmlFor="username" className="w-[25vh] text-md">
                             Username
                         </Label>
-                        <Input value={userData.username} readOnly={!isEditable} />
+                        <Input value={userData?.username} readOnly={!isEditable} />
                     </div>
                     <div className="flex items-center">
                         <Label htmlFor="email" className="w-[25vh] text-md">
                             Email Address
                         </Label>
-                        <Input value={userData.email} readOnly={!isEditable} />
+                        <Input value={userData?.email} readOnly={!isEditable} />
                     </div>
                     <div className="flex items-center justify-end">
                         {isEditable && (

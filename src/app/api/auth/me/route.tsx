@@ -5,11 +5,10 @@ import User from "@/db/models/user";
 import connectDB from "@/db/connectdb/connetdb";
 import { verifyJwtToken } from "@/lib/verify-jwt-token";
 
+
 export async function GET() {
     try {
         connectDB();
-
-        console.log("Hello World");
 
         const decodeToken = verifyJwtToken({ token: "sessionToken" });
         if (!decodeToken) {
@@ -18,10 +17,8 @@ export async function GET() {
                 message: "You are not authorized",
             });
         }
-        console.log(decodeToken);
 
-        const user = await User.findById(decodeToken?._id).select("-password -sessionToken");
-        console.log(user);
+        const user = await User.findById(decodeToken._id).select("-password -sessionToken");
         if (user) {
             return NextResponse.json({
                 status: 200,

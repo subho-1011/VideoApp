@@ -57,6 +57,7 @@ export default function LoginForm() {
             });
             router.push("/me");
         }
+        console.log(response);
     };
 
     return (

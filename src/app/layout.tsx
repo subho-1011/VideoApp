@@ -4,10 +4,7 @@ import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
-import Header from "@/components/navigation/Header";
-import Sider from "@/components/navigation/Sider";
-
-import { Toaster } from "@/components/ui/toaster";
+import StoreProvider from "./store-provider";
 
 const fontSans = FontSans({
     subsets: ["latin"],
@@ -30,16 +27,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-                    <div className="flex min-h-screen flex-col">
-                        <div className="flex-shrink-0">
-                            <Header />{" "}
-                        </div>
-                        <div className="flex flex-1 overflow-hidden">
-                            <div className="flex-shrink w-fit border-r">{/* <Sider /> */}</div>
-                            <main className="flex-1 overflow-y-auto">{children}</main>
-                        </div>
-                        <Toaster />
-                    </div>
+                    <StoreProvider>{children}</StoreProvider>
                 </ThemeProvider>
             </body>
         </html>
