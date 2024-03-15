@@ -1,9 +1,11 @@
-"use server";
+// "use server";
 
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/db/models/user";
 import connectDB from "@/db/connectdb/connetdb";
 import { verifyJwtToken } from "@/lib/verify-jwt-token";
+
+export const dynamic = "force-static";
 
 export async function GET(request: NextRequest) {
     try {
