@@ -168,20 +168,20 @@ export function ProfileCoverImage({}) {
     //     });
     // };
 
-    const getCoverImage = async () => {
-        const response = await axios({
-            method: "GET",
-            url: "/api/auth/me",
-        });
-
-        console.log(response.data);
-        setCoverImage(response.data.data.coverImage);
-        console.log(coverImage);
-    };
-
     useEffect(() => {
+        const getCoverImage = async () => {
+            const response = await axios({
+                method: "GET",
+                url: "/api/auth/me",
+            });
+
+            console.log(response.data);
+            setCoverImage(response.data.data.coverImage);
+            console.log(coverImage);
+        };
+
         getCoverImage();
-    }, []);
+    }, [coverImage]);
 
     return (
         <Card>
@@ -198,10 +198,7 @@ export function ProfileCoverImage({}) {
                         <>
                             <AlertDialog>
                                 <AlertDialogTrigger>
-                                    <Button
-                                        onClick={getCoverImage}
-                                        className="flex w-12 justify-center items-center m-1"
-                                    >
+                                    <Button className="flex w-12 justify-center items-center m-1">
                                         <Edit2Icon />
                                     </Button>
                                 </AlertDialogTrigger>

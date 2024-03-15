@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    darkMode: ["class"],
+    // darkMode: ["class"],
     images: {
         domains: ["res.cloudinary.com"],
     },
