@@ -1,16 +1,23 @@
 "use server";
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import User from "@/db/models/user";
 import connectDB from "@/db/connectdb/connetdb";
 import { verifyJwtToken } from "@/lib/verify-jwt-token";
 
-
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
         connectDB();
 
-        const decodeToken = verifyJwtToken({ token: "sessionToken" });
+        // const token = request.cookies.get("sessionToken");
+        // if (!token) {
+        //     return NextResponse.json({
+        //         status: 401,
+        //         message: "Unauthorized: No token provided",
+        //     });
+        // }
+
+        const decodeToken = verifyJwtToken();
         if (!decodeToken) {
             return NextResponse.json({
                 status: 200,
@@ -24,6 +31,11 @@ export async function GET() {
                 status: 200,
                 data: user,
                 message: "Get profile information",
+            });
+        } else {
+            return NextResponse.json({
+                status: 404,
+                message: "User not found",
             });
         }
     } catch (error) {

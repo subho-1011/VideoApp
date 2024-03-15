@@ -6,12 +6,12 @@ import connectDB from "@/db/connectdb/connetdb";
 import { verifyJwtToken } from "@/lib/verify-jwt-token";
 
 export async function PUT(request: NextRequest) {
-    console.log("PUT", request + " " + JSON.stringify(request));
+    // console.log("PUT", request + " " + JSON.stringify(request));
     try {
         connectDB();
         console.log("User updating ....");
 
-        const decodeToken = verifyJwtToken({ token: "sessionToken" });
+        const decodeToken = verifyJwtToken();
         if (!decodeToken) {
             return NextResponse.json({
                 status: 200,
@@ -43,9 +43,6 @@ export async function PUT(request: NextRequest) {
             message: "User updated successfully",
         });
     } catch (error: any) {
-        return NextResponse.json({
-            status: 500,
-            message: error.message,
-        });
+        console.log("An error occurred while updating");
     }
 }

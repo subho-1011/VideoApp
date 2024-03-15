@@ -1,3 +1,5 @@
+"use server";
+
 import connectDB from "@/db/connectdb/connetdb";
 import { NextRequest, NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
@@ -16,7 +18,7 @@ export async function PUT(request: NextRequest) {
 
     try {
         // check if the token is valid and user already authenticated
-        const decodeToken = verifyJwtToken({ token: "sessionToken" }) as DecodeToken;
+        const decodeToken = verifyJwtToken() as DecodeToken;
         const user = await User.findById(decodeToken);
         if (!user) {
             return NextResponse.json({

@@ -8,8 +8,8 @@ type Token = {
     email: string;
 };
 
-export const verifyJwtToken = ({ token }: { token: string }) => {
-    const getToken = cookies().get(token);
+export const verifyJwtToken = () => {
+    const getToken = cookies().get("sessionToken");
     if (!getToken) {
         return false;
     }
