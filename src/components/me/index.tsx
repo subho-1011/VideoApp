@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,10 @@ import { Input } from "@/components/ui/input";
 import { AvatarCard } from "./avatar-card";
 import axios from "axios";
 import { ProfileCoverImage } from "./cover-image";
-import { useAppSelector } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { profile_me } from "@/services/auth";
+import { setUser } from "@/store/features/user-slice";
+import { useRouter } from "next/navigation";
 
 export default function Profile() {
     return (
@@ -41,6 +44,27 @@ type UserData = {
 export function ProfileCard() {
     const [isEditable, setIsEditable] = React.useState<boolean>(false);
     const userData = useAppSelector((state) => state.User.user);
+    const dispatch = useAppDispatch();
+    const router = useRouter();
+    console.log(userData);
+
+    useEffect(() => {
+        const getUserData = async () => {
+            const res = await profile_me();
+            console.log(res.data);
+            let userData = res?.data;
+            if (!userData) {
+                router.push("/login");
+            } else {
+                dispatch(setUser(userData));
+            }
+        };
+
+        if (!userData) {
+            getUserData();
+        }
+    }, [router, dispatch, userData]);
+    console.log(userData);
 
     const onEditable = () => {
         setIsEditable(!isEditable);

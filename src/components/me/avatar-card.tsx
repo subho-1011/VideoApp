@@ -23,6 +23,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import axios from "axios";
 import { toast } from "@/components/ui/use-toast";
 import { useAppSelector } from "@/lib/hooks";
+import { tempAvatar } from "@/constants/constants";
 
 const formSchema = z.object({
     avatar: z.any(),
@@ -68,7 +69,7 @@ export function AvatarCard() {
         <div className="flex flex-col w-fit min-w-60 py-20 gap-4">
             <AlertDialog>
                 <AlertDialogTrigger>
-                    <UserAvatar avatarUrl={avatar?.url} />
+                    <UserAvatar avatarUrl={avatar?.url || tempAvatar} />
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                     <AlertDialogHeader>

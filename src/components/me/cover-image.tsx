@@ -24,6 +24,7 @@ import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useAppSelector } from "@/lib/hooks";
+import { tempCoverImage } from "@/constants/constants";
 
 export function ProfileCoverImage({}) {
     const coverImage = useAppSelector((state) => state.User.user?.coverImage);
@@ -33,7 +34,7 @@ export function ProfileCoverImage({}) {
             <div className="h-[30vh] flex relative">
                 <AspectRatio ratio={16 / 3}>
                     <Image
-                        src={coverImage?.url || ""}
+                        src={coverImage?.url || tempCoverImage}
                         alt="avatar"
                         layout="fill"
                         objectFit="cover"

@@ -1,18 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface Image {
-    url: string;
-    publicId: string;
+    url?: string;
+    publicId?: string;
 }
 
 interface User {
     username: string;
-    password: string;
     fullname: string;
     email: string;
-    avatar: Image;
-    coverImage: Image;
-    bio: string;
+    avatar?: Image;
+    coverImage?: Image;
+    bio?: string;
 }
 
 interface UserState {
@@ -34,23 +33,25 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         // set the initial state of the user
-        setUser: (state) => {
-            state.user = null;
+        setUser: (state, action) => {
+            state.user = action.payload;
             state.loading = false;
-            state.error = null;
-            state.loggedIn = false;
+            state.loggedIn = true;
         },
         // initialize the user
         initUser: (state, action) => {
             state.user = action.payload;
+            state.loggedIn = true;
         },
         // login the user
         loginUser: (state, action) => {
             state.user = action.payload;
+            state.loggedIn = true;
         },
         // logout the user
-        logoutUser: (state, action) => {
+        logoutUser: (state) => {
             state.user = null;
+            state.loggedIn = false;
         },
         // set the loading state of the user
         setLoading: (state, action) => {
@@ -60,6 +61,6 @@ export const userSlice = createSlice({
     },
 });
 
-export const { initUser } = userSlice.actions;
+export const { initUser, setUser, logoutUser } = userSlice.actions;
 
 export default userSlice.reducer;

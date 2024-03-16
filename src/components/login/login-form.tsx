@@ -11,7 +11,8 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
 import { useRouter } from "next/navigation";
-// import { signInMe } from "@/Services/auth";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { setUser } from "@/store/features/user-slice";
 
 const loginFormSchema = z.object({
     email: z.string().email(),
@@ -26,6 +27,8 @@ const loginFormSchema = z.object({
 export default function LoginForm() {
     const router = useRouter();
     const { toast } = useToast();
+    const dispatch = useAppDispatch();
+    const userData = useAppSelector((state) => state.User.user);
 
     const form = useForm<z.infer<typeof loginFormSchema>>({
         resolver: zodResolver(loginFormSchema),
@@ -36,12 +39,10 @@ export default function LoginForm() {
     });
 
     const onSubmit = async (data: z.infer<typeof loginFormSchema>) => {
-        // console.log(data.email);
         const formData = new FormData();
 
         formData.set("email", data.email);
         formData.set("password", data.email);
-        console.log(formData);
 
         const response = await axios({
             method: "post",
@@ -56,8 +57,10 @@ export default function LoginForm() {
                 duration: 3000,
             });
             router.push("/me");
+            const userData = response.data.data;
+            dispatch(setUser(userData));
+            // revalidatePath("/");
         }
-        console.log(response);
     };
 
     return (

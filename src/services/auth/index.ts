@@ -27,7 +27,10 @@ export const login_me = async (formData: any) => {
 
 export const profile_me = async () => {
     try {
-        const response = await axios.get("api/auth/me");
+        console.log("Profile");
+        const response = await axios.get("/api/auth/me");
+        console.log(response.data);
+
 
         return response.data;
     } catch (error) {

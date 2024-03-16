@@ -8,26 +8,26 @@ import Sider from "@/components/navigation/Sider";
 import { initUser } from "@/store/features/user-slice";
 import { profile_me } from "@/services/auth";
 import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/lib/hooks";
 
 export default function StoreProvider({ children }: { children: React.ReactNode }) {
     const storeRef = useRef<AppStore>();
 
     const router = useRouter();
 
-    const getUserData = async () => {
-        const res = await profile_me();
-        console.log(res.data);
-        let userData = res?.data;
-        if (!userData) {
-            // router.push("/signin");
-        } else {
-            storeRef?.current?.dispatch(initUser(userData));
-        }
-    };
-
     useEffect(() => {
+        const getUserData = async () => {
+            const res = await profile_me();
+            let userData = res?.data;
+            if (!userData) {
+                router.push("/login");
+            } else {
+                storeRef?.current?.dispatch(initUser(userData));
+            }
+        };
+
         getUserData();
-    }, [router]);
+    }, []);
 
     if (!storeRef.current) {
         // Create the store instance the first time this renders

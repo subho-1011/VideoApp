@@ -5,38 +5,47 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-const navElement = [
+type NavElement = {
+    id: number;
+    name: string;
+    path: string;
+    icons: React.ReactNode;
+};
+
+const navElement: NavElement[] = [
     {
+        id: 1,
         name: "Home",
         path: "/",
         icons: <Home />,
     },
     {
+        id: 2,
         name: "Profile",
         path: "/me",
         icons: <User />,
     },
+    { id: 3, name: "WatchHistory", path: "/watch-history", icons: <HistoryIcon /> },
     {
-        name: "WatchHistory",
-        path: "/watch-history",
-        icons: <HistoryIcon />,
-    },
-    {
+        id: 4,
         name: "Subscriptions",
         path: "/subscriptions",
         icons: <Users />,
     },
     {
+        id: 5,
         name: "Playlists",
         path: "/playlists",
         icons: <Tv2Icon />,
     },
     {
+        id: 6,
         name: "Liked Videos",
         path: "/liked-videos",
         icons: <Heart />,
     },
     {
+        id: 7,
         name: "Community Posts",
         path: "/community-posts",
         icons: <Podcast />,
@@ -57,8 +66,8 @@ export default function Sider() {
             </div>
             <div className="flex w-full flex-col px-4">
                 {navElement.map((item) => (
-                    <>
-                        <Link key={item.name} href={item.path} className="flex w-full">
+                    <div key={item.id}>
+                        <Link href={item.path} className="flex w-full">
                             <div
                                 className={cn(
                                     "flex w-full items-center mx-2 px-4 py-3 my-1.5 text font-medium rounded-2xl transition-transform delay-150 hover:scale-105 dark:hover:bg-slate-800 dark:hover:ring-2 dark:hover:ring-slate-400",
@@ -78,7 +87,7 @@ export default function Sider() {
                                 </div>
                             </div>
                         </Link>
-                    </>
+                    </div>
                 ))}
                 <Link href="/" className="flex w-full">
                     <div
