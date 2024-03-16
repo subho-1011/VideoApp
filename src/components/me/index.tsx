@@ -46,12 +46,10 @@ export function ProfileCard() {
     const userData = useAppSelector((state) => state.User.user);
     const dispatch = useAppDispatch();
     const router = useRouter();
-    console.log(userData);
 
     useEffect(() => {
         const getUserData = async () => {
             const res = await profile_me();
-            console.log(res.data);
             let userData = res?.data;
             if (!userData) {
                 router.push("/login");
@@ -64,7 +62,6 @@ export function ProfileCard() {
             getUserData();
         }
     }, [router, dispatch, userData]);
-    console.log(userData);
 
     const onEditable = () => {
         setIsEditable(!isEditable);

@@ -36,7 +36,6 @@ type Avatar = {
 
 export function AvatarCard() {
     const avatar = useAppSelector((state) => state.User.user?.avatar);
-    console.log(avatar);
     const [localAvatar, setLocalAvatar] = useState<Avatar>();
     const [newAvatarFile, setNewAvatarFile] = useState<File>();
 

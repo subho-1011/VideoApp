@@ -47,7 +47,7 @@ export default function Header() {
                     </div>
                 </div>
                 <div className="flex h-10 w-fit items-center gap-4 rounded-full">
-                    <Link href="videos/uploadVideo">
+                    <Link href="videos/add-video">
                         <VideoIcon size={25} className="flex items-center" />
                     </Link>
                     <div className="flex px-4 rounded-full">
