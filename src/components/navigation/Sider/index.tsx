@@ -1,5 +1,9 @@
 "use client";
+import { toast } from "@/components/ui/use-toast";
+import { useAppDispatch } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
+import { logoutUser } from "@/store/features/user-slice";
+import axios from "axios";
 import { Heart, HistoryIcon, Home, LogOutIcon, MenuIcon, Podcast, Tv2Icon, User, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -55,6 +59,16 @@ const navElement: NavElement[] = [
 export default function Sider() {
     const [open, setOpen] = React.useState<boolean>(false);
     const pathname = usePathname();
+    const dispatch = useAppDispatch();
+
+    const onLogout = async () => {
+        await axios.delete("/api/auth/logout");
+        dispatch(logoutUser());
+
+        toast({
+            title: "Logged out successfully",
+        });
+    };
 
     return (
         <div className="flex w-full h-full mt-4">
@@ -89,7 +103,7 @@ export default function Sider() {
                         </Link>
                     </div>
                 ))}
-                <Link href="/" className="flex w-full">
+                <div className="flex w-full" onClick={onLogout}>
                     <div
                         className={cn(
                             "flex w-full items-center mx-2 px-4 py-4 my-2 text font-medium rounded-2xl transition-transform delay-150 hover:scale-105 dark:hover:bg-slate-800 dark:hover:ring-2 dark:hover:ring-slate-400",
@@ -109,7 +123,7 @@ export default function Sider() {
                             Log Out
                         </div>
                     </div>
-                </Link>
+                </div>
             </div>
         </div>
     );
