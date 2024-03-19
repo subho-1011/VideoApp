@@ -64,7 +64,9 @@ export default function Header() {
                             <DropdownMenuContent className=" bg-transparent mt-3 mr-4 border rounded-lg">
                                 {!isLoggedIn ? (
                                     <DropdownMenuItem>
-                                        <div className="px-2 py-0.5">Login</div>
+                                        <div className="px-2 py-0.5  " onClick={() => router.push("/login")}>
+                                            Login
+                                        </div>
                                     </DropdownMenuItem>
                                 ) : (
                                     <>
