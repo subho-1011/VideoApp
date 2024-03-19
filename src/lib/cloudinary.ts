@@ -25,7 +25,6 @@ const uploadImageToCloudinary = async (localFilePath: string, folder: string): P
 
         // Delete local file after upload
         fs.unlinkSync(localFilePath);
-        console.log(response);
 
         return response;
     } catch (error) {
@@ -59,7 +58,6 @@ const uploadVideoToCloudinary = async (localFilePath: string, folder: string): P
 
         // Delete local file after upload
         fs.unlinkSync(localFilePath);
-        console.log(response);
 
         return response;
     } catch (error) {

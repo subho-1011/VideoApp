@@ -7,7 +7,7 @@ import { deleteFileFromCloudinary, uploadImageToCloudinary } from "@/lib/cloudin
 import User from "@/db/models/user";
 import { verifyJwtToken } from "@/lib/verify-jwt-token";
 
-type DecodeToken = {
+export type DecodeToken = {
     _id: string;
     username: string;
     email: string;
