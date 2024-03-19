@@ -1,10 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import axios from "axios";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -18,13 +21,15 @@ const addVideoSchema = z.object({
     description: z.string().trim(),
     thumbnail: z.any(),
     video: z.any(),
-    tags: z.array(z.string()),
+    // tags: z.array(z.string()),
     isPublished: z.boolean(),
 });
 
 export default function AddVideoPage({}: Props) {
     const [thumbnail, setThumbnail] = useState<File>();
     const [video, setVideo] = useState<File>();
+    const { toast } = useToast();
+    const [isUploading, setIsUploading] = useState<boolean>(false);
 
     const addVideoForm = useForm<z.infer<typeof addVideoSchema>>({
         resolver: zodResolver(addVideoSchema),
@@ -32,15 +37,64 @@ export default function AddVideoPage({}: Props) {
             title: "",
             slug: "",
             description: "",
-            thumbnail: "",
-            video: "",
-            tags: [],
+            thumbnail: undefined,
+            video: undefined,
+            // tags: [],
             isPublished: false,
         },
     });
 
     const onSubmit = async (data: z.infer<typeof addVideoSchema>) => {
-        console.log(data);
+        setIsUploading((prev) => !prev);
+
+        if (!thumbnail) {
+            setIsUploading((prev) => !prev);
+            toast({
+                variant: "destructive",
+                title: "ERROR",
+                description: "Please select a thumbnail",
+            });
+            return;
+        }
+        if (!video) {
+            console.log("Please select a video");
+            toast({
+                variant: "destructive",
+                title: "ERROR",
+                description: "Please select a thumbnail",
+            });
+            setIsUploading(!isUploading);
+            return;
+        }
+
+        data.thumbnail = thumbnail;
+        data.video = video;
+
+        const formData = new FormData();
+        formData.set("title", data.title);
+        formData.set("slug", data.slug);
+        formData.set("description", data.description);
+        formData.set("thumbnail", thumbnail);
+        formData.set("video", video);
+
+        const response = await axios.post("/api/videos/add-video", formData);
+
+        console.log(response.data.message);
+        if (response.data.status === 200) {
+            toast({
+                title: "Success",
+                description: response.data.message,
+                duration: 3000,
+            });
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: response.data.message,
+                duration: 10000,
+            });
+        }
+        setIsUploading((prev) => !prev);
     };
 
     useEffect(() => {}, []);
@@ -48,15 +102,19 @@ export default function AddVideoPage({}: Props) {
     const generateSlug = (title: string) => {
         return title
             .toLowerCase()
-            .replace(/[^a-zA-Z0-9 -]/g, "") // Remove non-alphanumeric characters except space and hyphen
-            .replace(/\s+/g, "-") // Replace spaces with hyphens
-            .replace(/--+/g, "-") // Replace multiple hyphens with single hyphen
-            .substring(0, 50); // Limit to 50 characters
+            .replace(/[^a-zA-Z0-9 -]/g, "")
+            .replace(/\s+/g, "-")
+            .replace(/--+/g, "-")
+            .substring(0, 50);
+    };
+
+    const tagTransform = (inputTags: string) => {
+        return inputTags.split(",").map((tag) => tag.trim());
     };
 
     return (
         <div className="w-full flex flex-col">
-            <Card>
+            <div>
                 <CardHeader>
                     <CardTitle className="text-center">Add New Video</CardTitle>
                     <CardContent>
@@ -110,18 +168,22 @@ export default function AddVideoPage({}: Props) {
                                     )}
                                 />
                                 {/* tags */}
-                                <FormField
+                                {/* <FormField
                                     control={addVideoForm.control}
                                     name="tags"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Tags</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="tags" {...field} />
+                                                <Input
+                                                    placeholder="tags"
+                                                    {...field}
+                                                    onChange={(e) => tagTransform(e.target.value)}
+                                                />
                                             </FormControl>
                                         </FormItem>
                                     )}
-                                />
+                                /> */}
                                 {/* thumbnail */}
                                 <FormField
                                     control={addVideoForm.control}
@@ -130,32 +192,32 @@ export default function AddVideoPage({}: Props) {
                                         <FormItem>
                                             <FormLabel>Thumbnail</FormLabel>
                                             <FormControl>
-                                                <div className="flex">
+                                                <>
                                                     <Input
                                                         type="file"
                                                         accept=".jpeg, .jpg, .png"
-                                                        placeholder={thumbnail?.name}
+                                                        placeholder="Thumbnail"
                                                         {...field}
                                                         onChange={(e) => {
                                                             setThumbnail(e.target.files![0]);
                                                         }}
                                                     />
-                                                </div>
+                                                </>
                                             </FormControl>
                                         </FormItem>
                                     )}
                                 />
                                 {thumbnail && (
                                     <>
-                                        <div className="py-2 mx-4">
+                                        <div className="py-2 mx-4 h-[250px]">
                                             <Image
                                                 src={URL.createObjectURL(thumbnail)}
                                                 alt="thumbnail"
                                                 width={400}
                                                 height={400}
                                                 loading="lazy"
+                                                className="h-[250px] object-cover"
                                             />
-                                            <h1>{thumbnail.name}</h1>
                                         </div>
                                     </>
                                 )}
@@ -177,7 +239,6 @@ export default function AddVideoPage({}: Props) {
                                                             setVideo(e.target.files![0]);
                                                         }}
                                                     />
-                                                    {video && <div>{video.name}</div>}
                                                 </>
                                             </FormControl>
                                         </FormItem>
@@ -194,16 +255,29 @@ export default function AddVideoPage({}: Props) {
                                 )} */}
 
                                 <div className="flex">
-                                    <Button type="submit">Submit</Button>
-                                    <Button onClick={() => addVideoForm.reset()} className="mx-10">
-                                        Reset
-                                    </Button>
+                                    {!isUploading ? (
+                                        <>
+                                            <Button type="submit">Submit</Button>
+                                            <Button onClick={() => addVideoForm.reset()} className="mx-10">
+                                                Reset
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Button disabled>
+                                                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> Submit
+                                            </Button>
+                                            <Button disabled className="mx-10">
+                                                Reset
+                                            </Button>
+                                        </>
+                                    )}
                                 </div>
                             </form>
                         </Form>
                     </CardContent>
                 </CardHeader>
-            </Card>
+            </div>
         </div>
     );
 }
