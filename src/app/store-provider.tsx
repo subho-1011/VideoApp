@@ -44,7 +44,7 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
                     <div className="flex-shrink w-fit border-r">
                         <Sider />
                     </div>
-                    <main className="flex-1 overflow-y-auto">{children}</main>
+                    <main className="flex-1 overflow-y-auto px-6 py-4">{children}</main>
                 </div>
                 <Toaster />
             </div>

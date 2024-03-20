@@ -78,7 +78,74 @@ export default function Sider() {
             >
                 <MenuIcon size={30} />
             </div>
-            <div className="flex w-full flex-col px-4">
+            {!open ? (
+                <div className="hidden md:flex w-full flex-col px-2 lg:px-4">
+                    {navElement.map((item) => (
+                        <div key={item.id}>
+                            <Link href={item.path} className="flex w-full">
+                                <div
+                                    className={cn(
+                                        "flex w-full items-center mx-2 px-4 py-3 my-1.5 text font-medium rounded-2xl transition-transform delay-150 hover:scale-105 dark:hover:bg-slate-800 dark:hover:ring-2 dark:hover:ring-slate-400"
+                                    )}
+                                >
+                                    <span className="">{item?.icons}</span>
+                                    <div>
+                                        <div className="hidden lg:flex lg:ml-4">{item.name}</div>
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
+                    ))}
+                    <div className="flex w-full" onClick={onLogout}>
+                        <div
+                            className={cn(
+                                "flex w-full items-center mx-2 px-4 py-4 my-2 text font-medium rounded-2xl transition-transform delay-150 hover:scale-105 dark:hover:bg-slate-800 dark:hover:ring-2 dark:hover:ring-slate-400"
+                            )}
+                        >
+                            <span className="">
+                                <LogOutIcon />
+                            </span>
+                            <div>
+                                <div className="hidden lg:flex lg:ml-4">Log Out</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className="flex w-full flex-col px-4">
+                    {navElement.map((item) => (
+                        <div key={item.id}>
+                            <Link href={item.path} className="flex w-full">
+                                <div
+                                    className={cn(
+                                        "flex w-full items-center mx-2 px-4 py-3 my-1.5 text font-medium rounded-2xl transition-transform delay-150 hover:scale-105 dark:hover:bg-slate-800 dark:hover:ring-2 dark:hover:ring-slate-400"
+                                    )}
+                                >
+                                    <span className="">{item?.icons}</span>
+                                    <div className={cn("hidden w-0")}>
+                                        <div className="hidden lg:flex">{item.name}</div>
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
+                    ))}
+                    <div className="flex w-full" onClick={onLogout}>
+                        <div
+                            className={cn(
+                                "flex w-full items-center mx-2 px-4 py-4 my-2 text font-medium rounded-2xl transition-transform delay-150 hover:scale-105 dark:hover:bg-slate-800 dark:hover:ring-2 dark:hover:ring-slate-400"
+                            )}
+                        >
+                            <span className="">
+                                <LogOutIcon />
+                            </span>
+                            <div className={cn("hidden w-0")}>
+                                <div className="hidden lg:flex">Log Out</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* <div className="flex w-full flex-col px-4">
                 {navElement.map((item) => (
                     <div key={item.id}>
                         <Link href={item.path} className="flex w-full">
@@ -97,7 +164,7 @@ export default function Sider() {
                                         "flex grow w-full pl-4": !open,
                                     })}
                                 >
-                                    <div className="">{item.name}</div>
+                                    <div className="hidden lg:flex">{item.name}</div>
                                 </div>
                             </div>
                         </Link>
@@ -120,11 +187,11 @@ export default function Sider() {
                                 "flex grow w-full pl-4": !open,
                             })}
                         >
-                            Log Out
+                            <div className="hidden lg:flex">Log Out</div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 }
