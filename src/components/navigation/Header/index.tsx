@@ -32,11 +32,11 @@ export default function Header() {
     return (
         <header className="sticky my-3 top-10 z-10 border-b h-16 w-full flex justify-center items-center md:px-20 pr-8 pl-16 sm:pl-20">
             <div className="flex justify-between w-full max-w-7xl">
-                <Link href="/home">
+                <Link href="/home" className="ml-4">
                     <LOGO />
                 </Link>
                 <div className="flex flex-shrink justify-end">
-                    <div className="flex">
+                    <div className="hidden md:flex">
                         <Input
                             placeholder="Search..."
                             className="flex min-w-72 w-[60vh] pl-4 rounded-full rounded-r-none bg-transparent ring-2 ring-neutral-500"
@@ -48,9 +48,9 @@ export default function Header() {
                 </div>
                 <div className="flex h-10 w-fit items-center gap-4 rounded-full">
                     <Link href="videos/add-video">
-                        <VideoIcon size={25} className="flex items-center" />
+                        <VideoIcon size={25} className="hidden md:flex items-center" />
                     </Link>
-                    <div className="flex px-4 rounded-full">
+                    <div className="hidden md:flex px-4 rounded-full">
                         <ModeToggle />
                     </div>
                     <div className="flex items-center justify-center">
